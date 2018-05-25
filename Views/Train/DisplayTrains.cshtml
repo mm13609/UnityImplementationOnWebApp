@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewBag.Title = "DisplayTrains";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>DisplayTrains</h2>
+<body class="container" ng-app="displayTrain">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+    <div class="col-md-6">
+      <table ng-controller="showTrains" class="table table-striped">
+          <thead>
+              <tr>
+                  <th scope="col">Train Symbol</th>
+                  <th scope="col">Speed</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Station Name</th>
+                  <th scope="col">Station Address</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr ng-repeat="train in trains">
+                  <td>{{train.TrainSymbol}}</td>
+                  <td>{{train.Speed}}</td>
+                  <td>{{train.Description}}</td>
+                  <td>{{train.StationName}}</td>
+                  <td>{{train.StationAddress}}</td>
+              </tr>
+          </tbody>
+      </table>
+    </div>
+</body>
+<script type="text/javascript">
+    var app = angular.module('displayTrain', []);
+    app.controller('showTrains', function ($scope, $http) {
+        $http.get("http://localhost:58824/Train/GetTrains").then(function (response) {
+            $scope.trains = response.data;
+        });
+    });
+</script>

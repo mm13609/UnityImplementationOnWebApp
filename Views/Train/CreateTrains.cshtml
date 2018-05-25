@@ -1,0 +1,80 @@
+﻿
+@{
+    ViewBag.Title = "Create Trains";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<body class="container" ng-app="myApp">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>    
+    <div class="col-md-1">
+        <header>Create Train</header>
+    </div>
+    <div class="col-md-6" ng-controller="postTrains" ng-hide="isHide">
+        <form ng-submit="createTrains()">
+            <div class="form-group">
+                <label for="trainSymbol">Train Symbol</label>
+                <input type="text" class="form-control" ng-model="train.TrainSymbol" id="txtTrainSymbol"/>
+            </div>
+            <div class="form-group">
+                <label for="speed">Speed</label>
+                <input type="number" class="form-control" ng-model="train.Speed" id="txtSpeed" required />
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" class="form-control" ng-model="train.Description" id="txtDescription" required />
+            </div>
+            <div class="form-group">
+                <label for="trainStation">Train Station Name</label>
+                <input type="text" class="form-control" ng-model="trainStation.StationName" id="txtTrainStation" required />
+            </div>
+            <div class="form-group">
+                <label for="trainStationAddress">Train Station Address</label>
+                <input type="text" class="form-control" ng-model="trainStation.StationAddress" id="txtTrainStationAddress" required />
+            </div>
+            <button type="submit" class="btn-success">Submit</button>
+        </form>
+    </div>
+   <div class="col-md-6">
+      @Html.ActionLink("Back to List", "DisplayTrains", "Train")
+   </div>
+    @*<div class="col-md-6" ng-controller="showTrains">
+        <table>
+            <tr ng-repeat="train in trains">
+                <td>{{train.TrainSymbol}}</td>
+                <td>{{train.Speed}}</td>
+                <td>{{train.StationID}}</td>
+            </tr>
+        </table>
+    </div>*@
+</body>
+<script type="text/javascript">
+    var app = angular.module('myApp', []);
+ 
+    //app.controller('showController', function ($scope, $http) {
+
+    //    $http.get("http://localhost:58824/Train/GetTrains")
+    //        .then(function (response) {
+    //            $scope.TrainSymbol = response.data[0].TrainSymbol;
+    //        });
+    //});
+
+    app.controller('showTrains', function ($scope, $http) {
+        $http.get("http://localhost:58824/Train/GetTrains").then(function (response) {
+            $scope.trains = response.data;
+        });
+    });
+
+    app.controller('postTrains', function ($scope, $http) {
+        $scope.isHide = false;
+
+        $scope.createTrains = function () {
+            var trainData = { 'train': $scope.train, 'trainStation': $scope.trainStation };
+            $http({
+                method: 'POST',
+                data: trainData,
+                url: 'http://localhost:58824/Train/Create'
+            });
+        }
+        
+    });
+</script>
